@@ -2,7 +2,7 @@
 // Koneksi ke database
 $servername = "localhost";
 $username = "root";
-$password = "";
+$password = "root";
 $dbname = "quiz";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
