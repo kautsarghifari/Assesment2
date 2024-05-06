@@ -1,75 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Quiz</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Data</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Quiz Data</h1>
-    <table id="quizTable" border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Question</th>
-                <th>Option 1</th>
-                <th>Option 2</th>
-                <th>Option 3</th>
-                <th>Option 4</th>
-                <th>Answer</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div class="container mt-5">
+        <h1 class="mb-4">Quiz Data</h1>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Question</th>
+                        <th>Option 1</th>
+                        <th>Option 2</th>
+                        <th>Option 3</th>
+                        <th>Option 4</th>
+                        <th>Answer</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="quizTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        // Fungsi untuk melakukan pemanggilan data dengan AJAX
-        function loadData() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    var data = JSON.parse(this.responseText);
-                    var table = document.getElementById("quizTable").getElementsByTagName('tbody')[0];
-                    table.innerHTML = '';
+        $(document).ready(function() {
+            loadData(); // Memuat data saat halaman pertama kali dibuka
 
-                    data.forEach(function(item) {
-                        var row = table.insertRow();
-                        row.insertCell().textContent = item.id;
-                        row.insertCell().textContent = item.question;
-                        row.insertCell().textContent = item.option1;
-                        row.insertCell().textContent = item.option2;
-                        row.insertCell().textContent = item.option3;
-                        row.insertCell().textContent = item.option4;
-                        row.insertCell().textContent = item.answer;
+            // Fungsi untuk melakukan pemanggilan data dengan AJAX
+            function loadData() {
+                $.ajax({
+                    url: 'quiz.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        var tableBody = $('#quizTableBody');
+                        tableBody.empty();
 
-                        var cell = row.insertCell();
-                        var deleteBtn = document.createElement('button');
-                        deleteBtn.textContent = 'Delete';
-                        deleteBtn.onclick = function() {
-                            deleteData(item.id);
-                        };
-                        cell.appendChild(deleteBtn);
-                    });
-                }
-            };
-            xhttp.open("GET", "quiz.php", true);
-            xhttp.send();
-        }
+                        data.forEach(function(item) {
+                            var row = '<tr>' +
+                                '<td>' + item.id + '</td>' +
+                                '<td>' + item.question + '</td>' +
+                                '<td>' + item.option1 + '</td>' +
+                                '<td>' + item.option2 + '</td>' +
+                                '<td>' + item.option3 + '</td>' +
+                                '<td>' + item.option4 + '</td>' +
+                                '<td>' + item.answer + '</td>' +
+                                '<td><button class="btn btn-danger btn-sm deleteBtn" data-id="' + item.id + '">Delete</button></td>' +
+                                '</tr>';
 
-        // Fungsi untuk menghapus data dengan AJAX
-        function deleteData(id) {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    loadData(); // Memuat ulang data setelah penghapusan
-                }
-            };
-            xhttp.open("GET", "delete.php?id=" + id, true);
-            xhttp.send();
-        }
+                            tableBody.append(row);
+                        });
 
-        // Memuat data saat halaman pertama kali dibuka
-        loadData();
+                        // Menambahkan event click pada tombol Delete
+                        $('.deleteBtn').click(function() {
+                            var id = $(this).data('id');
+                            deleteData(id);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        alert('Error fetching data.');
+                    }
+                });
+            }
+
+            // Fungsi untuk menghapus data dengan AJAX
+            function deleteData(id) {
+                $.ajax({
+                    url: 'delete.php?id=' + id,
+                    type: 'GET',
+                    success: function(response) {
+                        alert(response);
+                        loadData(); // Memuat ulang data setelah penghapusan
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        alert('Error deleting data.');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
