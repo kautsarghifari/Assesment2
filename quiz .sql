@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 06, 2024 at 05:35 AM
+-- Generation Time: May 06, 2024 at 05:40 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -42,9 +42,11 @@ CREATE TABLE `quiz` (
 --
 
 INSERT INTO `quiz` (`id`, `question`, `option1`, `option2`, `option3`, `option4`, `answer`) VALUES
+(1, 'Apa yang termasuk sampah berbahaya jenis B3?', 'Kertas', 'Baterai', 'Plastik', 'Botol kaca', 'B'),
 (2, 'Apa yang termasuk sampah anorganik?', 'Daun kering', 'Plastik', 'Sisa makanan', 'Sampah dapur', 'B'),
 (3, 'Apa yang termasuk sampah B3?', 'Botol kaca', 'Baterai', 'Sisa makanan', 'Kertas', 'B'),
-(4, 'Apa dampak dari penimbunan sampah organik?', 'Menimbulkan bau tidak sedap', 'Tidak memiliki dampak', 'Meningkatkan keindahan lingkungan', 'Mempercepat dekomposisi', 'A');
+(4, 'Apa dampak dari penimbunan sampah organik?', 'Menimbulkan bau tidak sedap', 'Tidak memiliki dampak', 'Meningkatkan keindahan lingkungan', 'Mempercepat dekomposisi', 'A'),
+(6, 'Apa yang termasuk sampah organik?', 'Sisa makanan', 'Kertas', 'Plastik', 'Botol kaca', 'A');
 
 --
 -- Indexes for dumped tables
@@ -64,7 +66,7 @@ ALTER TABLE `quiz`
 -- AUTO_INCREMENT for table `quiz`
 --
 ALTER TABLE `quiz`
-  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
